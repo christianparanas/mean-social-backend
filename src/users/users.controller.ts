@@ -9,12 +9,15 @@ import {
   Request,
   UseGuards 
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { AuthGuard } from '@nestjs/passport';
+// guards
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { LocalAuthGuard } from '../auth/guards/local-auth.guard';
 
 // authService
 import { AuthService } from '../auth/auth.service';
@@ -28,12 +31,13 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
   @Post('login')
   login(@Request() req) {
     return this.authService.login(req.user);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.usersService.findAll();

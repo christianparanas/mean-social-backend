@@ -1,12 +1,12 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { LocalStrategy } from './strategy/local-auth.strategy';
 import * as dotenv from 'dotenv';
-
-import { JwtStrategy } from './strategy/jwt.strategy';
-
 dotenv.config();
+
+// strategies
+import { LocalStrategy } from './strategies/local-auth.strategy';
+import { JwtStrategy } from './strategies/jwt-auth.strategy';
 
 import { UsersModule } from '../users/users.module';
 import { AuthService } from './auth.service';
