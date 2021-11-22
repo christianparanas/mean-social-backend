@@ -1,32 +1,59 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import {
+  BadRequestException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { compare, hash, genSalt } from 'bcrypt';
+
+import { RegisterUserDto } from './dto/register-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-export type User = any;
+// entities
+import { Users } from './entities/users.entity';
+
+export type User = {
+  userId: number;
+  username: string;
+  password: string;
+};
 
 @Injectable()
 export class UsersService {
+  constructor(
+    @InjectRepository(Users) private userRepository: Repository<Users>,
+  ) {}
 
   private readonly users = [
     {
-      userId: 1,
-      username: 'john',
-      password: 'changeme',
-    },
-    {
       userId: 2,
       username: 'maria',
-      password: 'guess',
+      password: String(hash('chan', 10)),
     },
   ];
 
   async findUser(username: string): Promise<User | undefined> {
-    return this.users.find(user => user.username === username);
+    return this.users.find((user) => user.username === username);
   }
 
-  
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async register(registerUserDto: RegisterUserDto) {
+    if (await this.userRepository.findOne({ email: registerUserDto.email })) {
+      throw new BadRequestException('Email already in use!');
+    }
+
+    const hashedPassword = await hash(
+      registerUserDto.password,
+      await genSalt(),
+    );
+
+    await this.userRepository.save({
+      email: registerUserDto.email,
+      password: hashedPassword,
+    });
+
+    return { message: 'Successfully Registered!', statusCode: HttpStatus.CREATED };
   }
 
   findAll() {

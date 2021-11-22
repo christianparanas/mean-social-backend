@@ -6,10 +6,7 @@ export class Users {
   uid: number;
 
   @Column({ nullable: false })
-  id: string;
-
-  @Column({ nullable: false })
-  name: string;
+  email: string;
 
   @Column({ nullable: false })
   password: string;
