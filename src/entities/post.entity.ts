@@ -4,7 +4,7 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne
+  ManyToOne,
 } from 'typeorm';
 
 // entities
@@ -21,7 +21,7 @@ export class Post {
   @Column({ nullable: true })
   image: string;
 
-  @Column({ nullable: false, default: "Public" })
+  @Column({ nullable: false, default: 'Public' })
   privacy: string;
 
   @Column({ nullable: false })
@@ -33,6 +33,6 @@ export class Post {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => User, user => user.posts)
-    user: User;
+  @ManyToOne(() => User, (user) => user.posts)
+  user: User;
 }
