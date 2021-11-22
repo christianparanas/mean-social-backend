@@ -1,6 +1,7 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -11,9 +12,12 @@ import { JwtStrategy } from './strategies/jwt-auth.strategy';
 import { UsersModule } from '../users/users.module';
 import { AuthService } from './auth.service';
 
+import { Users } from '../users/entities/users.entity';
+
 @Module({
   imports: [
     forwardRef(() => UsersModule),
+    TypeOrmModule.forFeature([Users]),
     PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,

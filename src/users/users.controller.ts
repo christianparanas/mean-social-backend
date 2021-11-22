@@ -33,7 +33,7 @@ export class UsersController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@Request() req) {
+  login(@Request() req) { // req.user data from local-auth validate method
     return this.authService.login(req.user);
   }
 

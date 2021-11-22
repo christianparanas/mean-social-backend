@@ -2,11 +2,10 @@ import {
   BadRequestException,
   HttpStatus,
   Injectable,
-  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { compare, hash, genSalt } from 'bcrypt';
+import { hash, genSalt } from 'bcrypt';
 
 import { RegisterUserDto } from './dto/register-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -25,18 +24,6 @@ export class UsersService {
   constructor(
     @InjectRepository(Users) private userRepository: Repository<Users>,
   ) {}
-
-  private readonly users = [
-    {
-      userId: 2,
-      username: 'maria',
-      password: String(hash('chan', 10)),
-    },
-  ];
-
-  async findUser(username: string): Promise<User | undefined> {
-    return this.users.find((user) => user.username === username);
-  }
 
   async register(registerUserDto: RegisterUserDto) {
     if (await this.userRepository.findOne({ email: registerUserDto.email })) {
@@ -57,7 +44,7 @@ export class UsersService {
   }
 
   findAll() {
-    return this.users;
+    return this.userRepository.find();
   }
 
   findOne(id: number) {
