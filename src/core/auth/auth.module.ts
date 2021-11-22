@@ -9,15 +9,15 @@ dotenv.config();
 import { LocalStrategy } from './strategies/local-auth.strategy';
 import { JwtStrategy } from './strategies/jwt-auth.strategy';
 
-import { UsersModule } from '../users/users.module';
+import { UsersModule } from '../../modules/users/users.module';
 import { AuthService } from './auth.service';
 
-import { Users } from '../users/entities/users.entity';
+import { User } from '../../entities/user.entity';
 
 @Module({
   imports: [
     forwardRef(() => UsersModule),
-    TypeOrmModule.forFeature([Users]),
+    TypeOrmModule.forFeature([User]),
     PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,

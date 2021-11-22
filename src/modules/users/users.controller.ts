@@ -16,11 +16,11 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 // guards
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { LocalAuthGuard } from '../auth/guards/local-auth.guard';
+import { JwtAuthGuard } from '../../core/auth/guards/jwt-auth.guard';
+import { LocalAuthGuard } from '../../core/auth/guards/local-auth.guard';
 
 // authService
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Controller('users')
 export class UsersController {

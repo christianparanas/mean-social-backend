@@ -3,9 +3,9 @@ import { ConfigModule } from '@nestjs/config';
 
 
 // modules
-import { UsersModule } from './users/users.module';
-import { DatabaseModule } from './database/database.module';
-import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
+import { CoreModule } from './core/core.module';
+import { PostsModule } from './modules/posts/posts.module';
 
 @Module({
   imports: [
@@ -13,8 +13,8 @@ import { AuthModule } from './auth/auth.module';
       isGlobal: true,
     }),
     UsersModule,
-    DatabaseModule,
-    AuthModule,
+    CoreModule,
+    PostsModule,
   ],
   controllers: [],
   providers: [],

@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { hash, genSalt } from 'bcrypt';
@@ -11,21 +7,17 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 // entities
-import { Users } from './entities/users.entity';
-
-export type User = {
-  userId: number;
-  username: string;
-  password: string;
-};
+import { User } from '../../entities/user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(Users) private userRepository: Repository<Users>,
+    @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
   async register(registerUserDto: RegisterUserDto) {
+    
+
     if (await this.userRepository.findOne({ email: registerUserDto.email })) {
       throw new BadRequestException('Email already in use!');
     }
@@ -40,7 +32,10 @@ export class UsersService {
       password: hashedPassword,
     });
 
-    return { message: 'Successfully Registered!', statusCode: HttpStatus.CREATED };
+    return {
+      message: 'Successfully Registered!',
+      statusCode: HttpStatus.CREATED,
+    };
   }
 
   findAll() {
