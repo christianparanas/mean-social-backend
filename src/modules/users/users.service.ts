@@ -16,8 +16,6 @@ export class UsersService {
   ) {}
 
   async register(registerUserDto: RegisterUserDto) {
-    
-
     if (await this.userRepository.findOne({ email: registerUserDto.email })) {
       throw new BadRequestException('Email already in use!');
     }
@@ -28,6 +26,7 @@ export class UsersService {
     );
 
     await this.userRepository.save({
+      name: registerUserDto.name,
       email: registerUserDto.email,
       password: hashedPassword,
     });
