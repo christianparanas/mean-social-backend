@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,8 +14,9 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
-    
     const user = await this.userRepository.findOne({ email: email });
+
+    if (!user) return null;
 
     const isMatch = await compare(password, user.password);
 
