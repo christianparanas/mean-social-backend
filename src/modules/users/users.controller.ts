@@ -7,7 +7,9 @@ import {
   Param,
   Delete,
   Request,
-  UseGuards 
+  UseGuards, 
+  UseInterceptors,
+  ClassSerializerInterceptor
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -38,9 +40,10 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('profile')
+  getProfileData(@Request() req) {
+    return this.usersService.getProfile(req.user);
   }
 
   @Get(':id')

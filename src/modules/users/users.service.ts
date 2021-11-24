@@ -37,8 +37,8 @@ export class UsersService {
     };
   }
 
-  findAll() {
-    return this.userRepository.find();
+  getProfile(user: any) {
+    return this.userRepository.findOne({ id: user.userId });
   }
 
   findOne(id: number) {
