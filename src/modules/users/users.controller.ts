@@ -7,9 +7,9 @@ import {
   Param,
   Delete,
   Request,
-  UseGuards, 
+  UseGuards,
   UseInterceptors,
-  ClassSerializerInterceptor
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -26,16 +26,20 @@ import { AuthService } from '../../core/auth/auth.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService, private authService: AuthService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private authService: AuthService,
+  ) {}
 
-  @Post("register")
+  @Post('register')
   register(@Body() registerUserDto: RegisterUserDto) {
     return this.usersService.register(registerUserDto);
   }
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@Request() req) { // req.user data from local-auth validate method
+  login(@Request() req) {
+    // req.user data from local-auth validate method
     return this.authService.login(req.user);
   }
 
