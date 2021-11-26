@@ -16,7 +16,7 @@ export class Post {
   id: number;
 
   @Column({ nullable: true })
-  content: string;
+  textContent: string;
 
   @Column({ nullable: true })
   image: string;
@@ -24,8 +24,8 @@ export class Post {
   @Column({ nullable: false, default: 'Public' })
   privacy: string;
 
-  @Column({ nullable: false })
-  like_count: string;
+  @Column({ nullable: true })
+  likeCount: string;
 
   @CreateDateColumn()
   createdAt: Date;
