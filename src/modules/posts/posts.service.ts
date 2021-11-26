@@ -19,11 +19,13 @@ export class PostsService {
       await this.postRepository.save({
         textContent: createPostDto.textContent,
         privacy: createPostDto.privacy,
-        UserId: user.userId,
+
+        // user id cant be save to the db because it cant haha
+        userId: user.userId,
       });
 
       return {
-        message: 'Posted!',
+        message: user,
         statusCode: HttpStatus.CREATED,
       };
     } catch (err) {
