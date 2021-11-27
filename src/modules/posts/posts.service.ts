@@ -32,8 +32,13 @@ export class PostsService {
   }
 
   async findAll() {
-    const allPosts = await this.postRepository.find({ relations: ["user"] });
-    
+    const allPosts = await this.postRepository.find({
+      relations: ['user'],
+      order: {
+        updatedAt: 'DESC',
+      },
+    });
+
     return {
       posts: allPosts,
       statusCode: HttpStatus.OK,
