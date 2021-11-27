@@ -31,8 +31,13 @@ export class PostsService {
     }
   }
 
-  findAll() {
-    return `This action returns all posts`;
+  async findAll() {
+    const allPosts = await this.postRepository.find({ relations: ["user"] });
+    
+    return {
+      posts: allPosts,
+      statusCode: HttpStatus.OK,
+    };
   }
 
   findOne(id: number) {
