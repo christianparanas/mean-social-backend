@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsEmail, IsString } from 'class-validator';
+import { IsNotEmpty, IsEmail, IsString, isNotEmpty } from 'class-validator';
 
 export class CreatePostDto {
   @IsString()
@@ -7,5 +7,4 @@ export class CreatePostDto {
   @IsString()
   @IsNotEmpty()
   privacy: string;
-
 }
