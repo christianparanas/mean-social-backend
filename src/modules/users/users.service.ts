@@ -37,6 +37,30 @@ export class UsersService {
     };
   }
 
+  async loginWithGoogle(data) {
+    if (await this.userRepository.findOne({ uid: data.id })) {
+      throw new BadRequestException('User Already Exist.');
+    }
+
+    const hashed = await hash(
+      data.sub,
+      await genSalt(),
+    );
+
+    await this.userRepository.save({
+      uid: data.id,
+      name: data.name,
+      email: data.email,
+      image: data.image,
+      password: hashed
+    });
+
+    return {
+      message: 'Successfully Registered!',
+      statusCode: HttpStatus.CREATED,
+    };
+  }
+
   getProfile(user: any) {
     return this.userRepository.findOne({ id: user.userId });
   }

@@ -43,6 +43,11 @@ export class UsersController {
     return this.authService.login(req.user);
   }
 
+  @Post('loginwithgoogle')
+  loginWithGoogle(@Body() body) {
+    return this.usersService.loginWithGoogle(body)
+  }
+
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('profile')

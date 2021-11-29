@@ -17,10 +17,16 @@ export class User {
   id: number;
 
   @Column({ nullable: false })
+  uid: string;
+
+  @Column({ nullable: false })
   name: string;
 
   @Column({ nullable: false })
   email: string;
+
+  @Column({ nullable: true })
+  image: string;
 
   @Exclude()
   @Column({ nullable: false })

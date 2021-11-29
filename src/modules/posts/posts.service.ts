@@ -32,17 +32,21 @@ export class PostsService {
   }
 
   async findAll() {
-    const allPosts = await this.postRepository.find({
-      relations: ['user'],
-      order: {
-        updatedAt: 'DESC',
-      },
-    });
+    try {
+      const allPosts = await this.postRepository.find({
+        relations: ['user'],
+        order: {
+          updatedAt: 'DESC',
+        },
+      });
 
-    return {
-      posts: allPosts,
-      statusCode: HttpStatus.OK,
-    };
+      return {
+        posts: allPosts,
+        statusCode: HttpStatus.OK,
+      };
+    } catch (err) {
+      return err;
+    }
   }
 
   findOne(id: number) {
