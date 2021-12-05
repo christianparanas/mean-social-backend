@@ -45,7 +45,7 @@ export class UsersController {
 
   @Post('loginwithgoogle')
   loginWithGoogle(@Body() body) {
-    return this.usersService.loginWithGoogle(body)
+    return this.usersService.loginWithGoogle(body);
   }
 
   @UseGuards(JwtAuthGuard)
