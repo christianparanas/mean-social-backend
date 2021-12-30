@@ -31,6 +31,13 @@ export class UsersController {
     private authService: AuthService,
   ) {}
 
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get()
+  getUsers() {
+    return this.usersService.getUsers();
+  }
+
   @Post('register')
   register(@Body() registerUserDto: RegisterUserDto) {
     return this.usersService.register(registerUserDto);
@@ -54,6 +61,7 @@ export class UsersController {
   getProfileData(@Request() req) {
     return this.usersService.getProfile(req.user);
   }
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {

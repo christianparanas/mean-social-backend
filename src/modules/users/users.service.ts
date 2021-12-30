@@ -42,17 +42,14 @@ export class UsersService {
       throw new BadRequestException('User Already Exist.');
     }
 
-    const hashed = await hash(
-      data.sub,
-      await genSalt(),
-    );
+    const hashed = await hash(data.sub, await genSalt());
 
     await this.userRepository.save({
       uid: data.id,
       name: data.name,
       email: data.email,
       image: data.image,
-      password: hashed
+      password: hashed,
     });
 
     return {
@@ -63,6 +60,23 @@ export class UsersService {
 
   getProfile(user: any) {
     return this.userRepository.findOne({ id: user.userId });
+  }
+
+  async getUsers() {
+    try {
+      const allUsers = await this.userRepository.find({
+        order: {
+          updatedAt: 'DESC',
+        },
+      });
+
+      return {
+        users: allUsers,
+        statusCode: HttpStatus.OK,
+      };
+    } catch (err) {
+      return err;
+    }
   }
 
   findOne(id: number) {
