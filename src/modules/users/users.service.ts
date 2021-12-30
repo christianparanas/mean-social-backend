@@ -1,6 +1,6 @@
 import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { hash, genSalt } from 'bcrypt';
 
 import { RegisterUserDto } from './dto/register-user.dto';
@@ -62,9 +62,10 @@ export class UsersService {
     return this.userRepository.findOne({ id: user.userId });
   }
 
-  async getUsers() {
+  async getUsers(user: any) {
     try {
       const allUsers = await this.userRepository.find({
+        where: { id: Not(user.userId) },
         order: {
           updatedAt: 'DESC',
         },

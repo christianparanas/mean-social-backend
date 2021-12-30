@@ -34,8 +34,8 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
-  getUsers() {
-    return this.usersService.getUsers();
+  getUsers(@Request() req) {
+    return this.usersService.getUsers(req.user);
   }
 
   @Post('register')
