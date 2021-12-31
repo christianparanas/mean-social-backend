@@ -19,7 +19,7 @@ export class User {
   @Column({ nullable: false })
   uid: string;
 
-  @Column({ nullable: false, unique: true })
+  @Column({ nullable: false })
   username: string;
 
   @Column({ nullable: false })

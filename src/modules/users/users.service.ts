@@ -59,7 +59,13 @@ export class UsersService {
   }
 
   getProfile(user: any) {
-    return this.userRepository.findOne({ id: user.userId });
+    return this.userRepository.findOne({
+      where: { id: user.userId },
+      relations: ['posts', 'posts.user'],
+      order: {
+        updatedAt: 'DESC',
+      },
+    });
   }
 
   async getUsers(user: any) {
