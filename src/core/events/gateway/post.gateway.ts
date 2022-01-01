@@ -22,6 +22,7 @@ export class PostGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('newPost')
   handleMessage(socket: Socket) {
-    this.server.emit('newPostIndicator', 'Load new posts.');
+    // send event to all connected user except for the post author or sender
+    socket.broadcast.emit('newPostIndicator', 'Load new posts.');
   }
 }
