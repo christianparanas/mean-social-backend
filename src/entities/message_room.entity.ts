@@ -6,39 +6,24 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { Exclude } from 'class-transformer';
 
 // entities
-import { Post } from './post.entity';
 import { Message } from './message.entity';
 import { MessageParticipants } from './message_participants.entity';
 
 @Entity()
-export class User {
+export class MessageRoom {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ nullable: false })
-  uid: string;
-
-  @Column({ nullable: false })
-  username: string;
+  uuid: string;
 
   @Column({ nullable: false })
   name: string;
 
   @Column({ nullable: false })
-  email: string;
-
-  @Column({ nullable: true })
-  image: string;
-
-  @Column({ nullable: false, default: "false" })
-  isOnline: string;
-
-  @Exclude()
-  @Column({ nullable: false })
-  password: string;
+  type: string;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -46,12 +31,7 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-
-
-  @OneToMany(() => Post, (post) => post.user)
-  posts: Post[];
-
-  @OneToMany(() => Message, (message) => message.user)
+  @OneToMany(() => Message, (message) => message.messageRoom)
   message: Message;
 
   @OneToMany(() => MessageParticipants, (messageParticipants) => messageParticipants.messageRoom)

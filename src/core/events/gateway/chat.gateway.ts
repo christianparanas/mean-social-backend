@@ -8,17 +8,9 @@ import {
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({ cors: { origin: ['http://localhost:4200'] } })
-export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class ChatGateway {
   @WebSocketServer()
   server: Server;
-
-  handleConnection(client: any, ...args: any[]) {
-    console.log('connected');
-  }
-
-  handleDisconnect(client: any) {
-    console.log('disconnect');
-  }
 
   @SubscribeMessage('sendMsg')
   handleMessage(socket: Socket, message: string) {
