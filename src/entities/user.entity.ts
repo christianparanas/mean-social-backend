@@ -33,7 +33,7 @@ export class User {
   @Column({ nullable: true })
   image: string;
 
-  @Column({ nullable: false, default: "false" })
+  @Column({ nullable: false, default: 'false' })
   isOnline: string;
 
   @Exclude()
@@ -46,14 +46,15 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-
-
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 
   @OneToMany(() => Message, (message) => message.user)
   message: Message;
 
-  @OneToMany(() => MessageParticipants, (messageParticipants) => messageParticipants.messageRoom)
+  @OneToMany(
+    () => MessageParticipants,
+    (messageParticipants) => messageParticipants.messageRoom,
+  )
   messageParticipants: MessageParticipants;
 }

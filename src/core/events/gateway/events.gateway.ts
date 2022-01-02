@@ -32,35 +32,37 @@ export class EventsGateway
   activeUsers = {};
 
   @SubscribeMessage('userOnline')
-  handleMessage(socket: Socket, data: any) {
+  handleMessage(socket: Socket, data?: any) {
     // set user status to online
     this.setUserOnline(data);
-
     this.activeUsers[socket.id] = data;
 
-    socket.broadcast.emit('userIsOnline', 'Hey');
+    socket.broadcast.emit('userChangeStatus');
   }
 
-  handleConnection(client: Socket, ...args: any[]) {
+
+  handleConnection(client: Socket) {
     this.logger.log(`Client connected: ${client.id}`);
   }
 
   handleDisconnect(client: Socket) {
-    // this.logger.log(`Client disconnected: ${client.id}`);
-    console.log(this.activeUsers);
+    this.logger.log(`Client disconnected: ${client.id}`);
 
     for (var key in this.activeUsers) {
       if (key == client.id) {
         this.setUserOffline(this.activeUsers[key]);
+        client.broadcast.emit('userChangeStatus');
       }
     }
   }
 
-  async setUserOnline(id: any) {
+  setUserOnline(id: any) {
     this.userRepository.update(id, { isOnline: 'true' });
   }
 
-  async setUserOffline(id: any) {
+  setUserOffline(id: any) {
     this.userRepository.update(id, { isOnline: 'false' });
   }
+
+  
 }
