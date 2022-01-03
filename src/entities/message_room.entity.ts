@@ -19,8 +19,6 @@ export class MessageRoom {
   @Column({ nullable: false })
   uuid: string;
 
-  @Column({ nullable: false })
-  name: string;
 
   @Column({ nullable: false })
   type: string;
