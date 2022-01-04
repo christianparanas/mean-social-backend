@@ -1,6 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 
 import { MessageRoom } from 'src/entities/message_room.entity';
@@ -12,37 +12,39 @@ export class ChatsService {
   constructor(
     @InjectRepository(MessageRoom)
     private msgRoomRepository: Repository<MessageRoom>,
-    @InjectRepository(MessageRoom)
-    private messageRepo: Repository<Message>,
-    @InjectRepository(MessageRoom)
-    private messageParticipantsRepo: Repository<MessageParticipants>,
+    @InjectRepository(Message)
+    private messageRepo: Repository<any>,
+    @InjectRepository(MessageParticipants)
+    private messageParticipantsRepo: Repository<any>,
   ) {}
 
   async create(data: any) {
-    console.log(data);
     try {
-      const roomId = uuidv4();
+      if (await this.msgRoomRepository.findOne({ id: data.roomId })) {
+        console.log('room already');
+      }
 
-     this.msgRoomRepository.save({
-        uuid: roomId,
-        type: 'private',
-      });
+      // await this.msgRoomRepository.save({
+      //   type: 'private',
+      // })
+      // .then((room) => {
 
-      this.messageRepo.save({
-        message: data.message,
-        messageRoom: roomId,
-        user: data.sender,
-      });
+      //   this.messageRepo.save({
+      //     message: data.message,
+      //     messageRoom: room.id,
+      //     user: data.sender,
+      //   });
 
-      this.messageParticipantsRepo.save({
-        messageRoom: roomId,
-        user: data.reciever,
-      });
+      //   this.messageParticipantsRepo.save({
+      //     messageRoom: room.id,
+      //     user: data.reciever,
+      //   });
 
-      this.messageParticipantsRepo.save({
-        messageRoom: roomId,
-        user: data.sender,
-      });
+      //   this.messageParticipantsRepo.save({
+      //     messageRoom: room.id,
+      //     user: data.sender,
+      //   });
+      // })
 
       return {
         message: 'Sent!',
@@ -53,17 +55,38 @@ export class ChatsService {
     }
   }
 
-  async findAll() {
+  async findAll(user) {
     try {
-      const allMsgs = await this.msgRoomRepository.find({
-        relations: ['message'],
+      const rooms: any = await this.messageParticipantsRepo.find({
+        where: {
+          user: user.userId,
+        },
+        relations: ['messageRoom'],
         order: {
           updatedAt: 'DESC',
         },
       });
 
+      let roomsIdArr: any = [];
+
+      rooms.map((room: any) => {
+        roomsIdArr.push(room.messageRoom.id);
+      });
+
+      const msgs = await this.messageParticipantsRepo.find({
+        where: {
+          messageRoom: roomsIdArr[0],
+        },
+        relations: ['user'],
+        order: {
+          updatedAt: 'DESC',
+        },
+      });
+
+      const result = msgs.filter((msg) => msg.user.id != user.userId);
+
       return {
-        messages: allMsgs,
+        messages: result,
         statusCode: HttpStatus.OK,
       };
     } catch (err) {

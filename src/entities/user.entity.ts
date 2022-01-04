@@ -50,11 +50,11 @@ export class User {
   posts: Post[];
 
   @OneToMany(() => Message, (message) => message.user)
-  message: Message;
+  messages: Message[];
 
   @OneToMany(
     () => MessageParticipants,
     (messageParticipants) => messageParticipants.messageRoom,
   )
-  messageParticipants: MessageParticipants;
+  messageParticipants: MessageParticipants[];
 }

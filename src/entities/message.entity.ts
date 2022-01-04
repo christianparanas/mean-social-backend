@@ -27,9 +27,9 @@ export class Message {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => MessageRoom, (messageRoom) => messageRoom.message)
+  @ManyToOne(() => MessageRoom, (messageRoom) => messageRoom.messages)
   messageRoom: MessageRoom;
 
-  @ManyToOne(() => User, (user) => user.message)
+  @ManyToOne(() => User, (user) => user.messages)
   user: User;
 }

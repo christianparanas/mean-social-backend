@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/core/auth/guards/jwt-auth.guard';
 import { ChatsService } from './chats.service';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
@@ -12,9 +13,11 @@ export class ChatsController {
     return this.chatsService.create(req.body);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
-  findAll() {
-    return this.chatsService.findAll();
+  findAll(@Request() req) {
+    return this.chatsService.findAll(req.user);
   }
 
   @Get(':id')

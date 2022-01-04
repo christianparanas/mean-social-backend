@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 
 // entities
@@ -13,12 +14,8 @@ import { MessageParticipants } from './message_participants.entity';
 
 @Entity()
 export class MessageRoom {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ nullable: false })
-  uuid: string;
-
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ nullable: false })
   type: string;
@@ -30,8 +27,11 @@ export class MessageRoom {
   updatedAt: Date;
 
   @OneToMany(() => Message, (message) => message.messageRoom)
-  message: Message;
+  messages: Message[];
 
-  @OneToMany(() => MessageParticipants, (messageParticipants) => messageParticipants.messageRoom)
-  messageParticipants: MessageParticipants;
+  @OneToMany(
+    () => MessageParticipants,
+    (messageParticipants) => messageParticipants.messageRoom,
+  )
+  messageParticipants: MessageParticipants[];
 }
