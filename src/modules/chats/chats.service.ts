@@ -20,36 +20,51 @@ export class ChatsService {
 
   async create(data: any) {
     try {
-      if (await this.msgRoomRepository.findOne({ id: data.roomId })) {
-        console.log('room already');
-      }
+      this.msgRoomRepository
+        .find({
+          id: data.roomId
+        })
+        .then(async (res: any) => {
+          console.log(res);
 
-      // await this.msgRoomRepository.save({
-      //   type: 'private',
-      // })
-      // .then((room) => {
+          if (res.length == 0) {
+            try {
+              this.msgRoomRepository
+                .save({
+                  type: 'private',
+                })
+                .then((room) => {
+                  this.messageRepo.save({
+                    message: data.message,
+                    messageRoom: room.id,
+                    user: data.sender,
+                  });
 
-      //   this.messageRepo.save({
-      //     message: data.message,
-      //     messageRoom: room.id,
-      //     user: data.sender,
-      //   });
+                  this.messageParticipantsRepo.save({
+                    messageRoom: room.id,
+                    user: data.reciever,
+                  });
 
-      //   this.messageParticipantsRepo.save({
-      //     messageRoom: room.id,
-      //     user: data.reciever,
-      //   });
+                  this.messageParticipantsRepo.save({
+                    messageRoom: room.id,
+                    user: data.sender,
+                  });
+                });
+            } catch (error) {
+              console.log(error);
+            }
+          } else {
+            this.messageRepo.save({
+              message: data.message,
+              messageRoom: res.id,
+              user: data.sender,
+            });
+          }
+        });
 
-      //   this.messageParticipantsRepo.save({
-      //     messageRoom: room.id,
-      //     user: data.sender,
-      //   });
-      // })
-
-      return {
-        message: 'Sent!',
-        statusCode: HttpStatus.CREATED,
-      };
+      // return {
+      //   statusCode: HttpStatus.CREATED,
+      // };
     } catch (err) {
       return err;
     }
@@ -73,17 +88,23 @@ export class ChatsService {
         roomsIdArr.push(room.messageRoom.id);
       });
 
-      const msgs = await this.messageParticipantsRepo.find({
-        where: {
-          messageRoom: roomsIdArr[0],
-        },
-        relations: ['user'],
+      let peopleArr: any = [];
+
+      roomsIdArr.map((pp, index) => {
+        peopleArr.push({
+          messageRoom: roomsIdArr[index],
+        });
+      });
+
+      const people = await this.messageParticipantsRepo.find({
+        where: peopleArr,
+        relations: ['user', 'messageRoom'],
         order: {
           updatedAt: 'DESC',
         },
       });
 
-      const result = msgs.filter((msg) => msg.user.id != user.userId);
+      const result = people.filter((person) => person.user.id != user.userId);
 
       return {
         messages: result,
