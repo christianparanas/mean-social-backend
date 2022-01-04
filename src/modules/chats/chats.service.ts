@@ -50,6 +50,7 @@ export class ChatsService {
                     user: data.sender,
                   });
                 });
+
             } catch (error) {
               console.log(error);
             }
@@ -70,7 +71,7 @@ export class ChatsService {
     }
   }
 
-  async findAll(user) {
+  async getUserChats(user) {
     try {
       const rooms: any = await this.messageParticipantsRepo.find({
         where: {

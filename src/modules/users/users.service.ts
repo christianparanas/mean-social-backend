@@ -8,11 +8,20 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 // entities
 import { User } from '../../entities/user.entity';
+import { MessageRoom } from 'src/entities/message_room.entity';
+import { Message } from 'src/entities/message.entity';
+import { MessageParticipants } from 'src/entities/message_participants.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(MessageRoom)
+    private msgRoomRepository: Repository<MessageRoom>,
+    @InjectRepository(Message)
+    private messageRepo: Repository<any>,
+    @InjectRepository(MessageParticipants)
+    private messageParticipantsRepo: Repository<any>,
   ) {}
 
   async register(registerUserDto: RegisterUserDto) {
@@ -79,6 +88,27 @@ export class UsersService {
 
       return {
         users: allUsers,
+        statusCode: HttpStatus.OK,
+      };
+    } catch (err) {
+      return err;
+    }
+  }
+
+  async getUserChats(user) {
+    try {
+      const rooms: any = await this.userRepository.find({
+        where: {
+          id: Not(user.userId),
+        },
+        relations: ['messageParticipants', 'messageParticipants.messageRoom'],
+        order: {
+          updatedAt: 'DESC',
+        },
+      });
+
+      return {
+        users: rooms,
         statusCode: HttpStatus.OK,
       };
     } catch (err) {

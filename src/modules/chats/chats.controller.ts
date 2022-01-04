@@ -17,7 +17,7 @@ export class ChatsController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   findAll(@Request() req) {
-    return this.chatsService.findAll(req.user);
+    return this.chatsService.getUserChats(req.user);
   }
 
   @Get(':id')

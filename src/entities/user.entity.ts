@@ -56,5 +56,5 @@ export class User {
     () => MessageParticipants,
     (messageParticipants) => messageParticipants.messageRoom,
   )
-  messageParticipants: MessageParticipants[];
+  messageParticipants: MessageParticipants;
 }
