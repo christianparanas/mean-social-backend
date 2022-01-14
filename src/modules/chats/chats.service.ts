@@ -73,39 +73,44 @@ export class ChatsService {
 
   async getUserChats(user) {
     try {
-      const rooms: any = await this.messageParticipantsRepo.find({
+    
+      const result: any = await this.msgRoomRepository.find({
+        relations: ['messages', 'messageParticipants'],
         where: {
-          user: user.userId,
+          messageParticipants: {
+            user: user.userId,
+          }
         },
-        relations: ['messageRoom'],
         order: {
           updatedAt: 'DESC',
         },
       });
 
-      let roomsIdArr: any = [];
+      // let roomsIdArr: any = [];
 
-      rooms.map((room: any) => {
-        roomsIdArr.push(room.messageRoom.id);
-      });
+      // rooms.map((room: any) => {
+      //   roomsIdArr.push(room.messageRoom.id);
+      // });
 
-      let peopleArr: any = [];
+      // let peopleArr: any = [];
 
-      roomsIdArr.map((pp, index) => {
-        peopleArr.push({
-          messageRoom: roomsIdArr[index],
-        });
-      });
+      // roomsIdArr.map((pp, index) => {
+      //   peopleArr.push({
+      //     messageRoom: roomsIdArr[index],
+      //   });
+      // });
 
-      const people = await this.messageParticipantsRepo.find({
-        where: peopleArr,
-        relations: ['user', 'messageRoom'],
-        order: {
-          updatedAt: 'DESC',
-        },
-      });
+      // const people = await this.messageParticipantsRepo.find({
+      //   where: {
+      //     user: user.userId,
+      //   },
+      //   relations: ['user', 'messageRoom'],
+      //   order: {
+      //     updatedAt: 'DESC',
+      //   },
+      // });
 
-      const result = people.filter((person) => person.user.id != user.userId);
+      // const result = people.filter((person) => person.user.id != user.userId);
 
       return {
         messages: result,
