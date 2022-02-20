@@ -38,12 +38,12 @@ export class UsersController {
     return this.usersService.getUsers(req.user);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Get('chats')
-  getUsersChats(@Request() req) {
-    return this.usersService.getUserChats(req.user);
-  }
+  // @UseGuards(JwtAuthGuard)
+  // @UseInterceptors(ClassSerializerInterceptor)
+  // @Get('chats')
+  // getUsersChats(@Request() req) {
+  //   return this.usersService.getUserChats(req.user);
+  // }
 
   @Post('register')
   register(@Body() registerUserDto: RegisterUserDto) {

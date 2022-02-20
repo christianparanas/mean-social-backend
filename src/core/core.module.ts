@@ -5,14 +5,7 @@ import { DatabaseModule } from './database/database.module';
 import { EventsModule } from './events/events.module';
 
 @Module({
-  imports: [
-    AuthModule,
-    DatabaseModule,
-    EventsModule
-  ],
-  exports: [
-    AuthModule,
-    DatabaseModule
-  ]
+  imports: [AuthModule, DatabaseModule, EventsModule],
+  exports: [AuthModule, DatabaseModule],
 })
 export class CoreModule {}

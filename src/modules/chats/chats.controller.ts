@@ -8,18 +8,19 @@ import { UpdateChatDto } from './dto/update-chat.dto';
 export class ChatsController {
   constructor(private readonly chatsService: ChatsService) {}
 
-  @Post()
-  create(@Request() req) {
-    return this.chatsService.create(req.body);
-  }
+  // @Post()
+  // create(@Request() req) {
+  //   return this.chatsService.create(req.body);
+  // }
 
-  @UseGuards(JwtAuthGuard)
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Get()
-  findAll(@Request() req) {
-    return this.chatsService.getUserChats(req.user);
-  }
+  // @UseGuards(JwtAuthGuard)
+  // @UseInterceptors(ClassSerializerInterceptor)
+  // @Get()
+  // findAll(@Request() req) {
+  //   return this.chatsService.getUserChats(req.user);
+  // }
 
+  
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.chatsService.findOne(+id);

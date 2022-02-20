@@ -11,15 +11,15 @@ import {
 // entities
 import { Post } from './post.entity';
 import { User } from './user.entity';
-import { MessageRoom } from './message_room.entity';
+import { Conversations } from './conversations';
 
 @Entity()
-export class Message {
+export class Messages {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ nullable: false })
-  message: string;
+  text: string;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -27,9 +27,11 @@ export class Message {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => MessageRoom, (messageRoom) => messageRoom.messages)
-  messageRoom: MessageRoom;
+  @ManyToOne(() => User, (user) => user)
+  sender: User;
 
-  @ManyToOne(() => User, (user) => user.messages)
-  user: User;
+  @ManyToOne(() => Conversations, (conversations) => conversations)
+  conversation: Conversations;
+
+
 }

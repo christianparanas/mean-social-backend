@@ -10,8 +10,9 @@ import { Exclude } from 'class-transformer';
 
 // entities
 import { Post } from './post.entity';
-import { Message } from './message.entity';
-import { MessageParticipants } from './message_participants.entity';
+import { Messages } from './messages.entity';
+import { Conversations } from './conversations';
+
 
 @Entity()
 export class User {
@@ -49,12 +50,9 @@ export class User {
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 
-  @OneToMany(() => Message, (message) => message.user)
-  messages: Message[];
+  @OneToMany(() => Messages, (message) => message.conversation)
+  messages: Messages[];
 
-  @OneToMany(
-    () => MessageParticipants,
-    (messageParticipants) => messageParticipants.messageRoom,
-  )
-  messageParticipants: MessageParticipants;
+  @OneToMany(() => Conversations, (convo) => convo.messages)
+  conversations: Conversations[];
 }

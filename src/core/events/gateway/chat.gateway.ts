@@ -17,7 +17,7 @@ export class ChatGateway {
 
   @SubscribeMessage('sendMsg')
   handleMessage(socket: Socket, sentData: string) {
-    this.chatsService.create(sentData)
+    // this.chatsService.create(sentData)
 
     this.server.emit('newMsg', sentData);
   }

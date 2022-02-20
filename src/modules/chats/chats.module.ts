@@ -5,15 +5,14 @@ import { ChatsService } from './chats.service';
 import { ChatsController } from './chats.controller';
 
 import { User } from '../../entities/user.entity';
-import { MessageRoom } from 'src/entities/message_room.entity';
-import { Message } from 'src/entities/message.entity';
-import { MessageParticipants } from 'src/entities/message_participants.entity';
+import { Conversations } from 'src/entities/conversations';
+import { Messages } from 'src/entities/messages.entity';
 import { AuthModule } from 'src/core/auth/auth.module';
 
 @Module({
   imports: [
     forwardRef(() => AuthModule),
-    TypeOrmModule.forFeature([User, MessageRoom, Message, MessageParticipants]),
+    TypeOrmModule.forFeature([User, Messages, Conversations]),
   ],
   controllers: [ChatsController],
   providers: [ChatsService],

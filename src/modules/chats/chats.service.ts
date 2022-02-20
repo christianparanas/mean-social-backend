@@ -3,123 +3,107 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Not, Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 
-import { MessageRoom } from 'src/entities/message_room.entity';
-import { Message } from 'src/entities/message.entity';
-import { MessageParticipants } from 'src/entities/message_participants.entity';
+import { Conversations } from 'src/entities/conversations';
+import { Messages } from 'src/entities/messages.entity';
+import { parse } from 'path/posix';
 
 @Injectable()
 export class ChatsService {
   constructor(
-    @InjectRepository(MessageRoom)
-    private msgRoomRepository: Repository<MessageRoom>,
-    @InjectRepository(Message)
-    private messageRepo: Repository<any>,
-    @InjectRepository(MessageParticipants)
-    private messageParticipantsRepo: Repository<any>,
+    @InjectRepository(Conversations)
+    private conversationRepository: Repository<Conversations>,
+    @InjectRepository(Messages) private messageRepo: Repository<any>,
   ) {}
 
-  async create(data: any) {
-    try {
-      this.msgRoomRepository
-        .find({
-          id: data.roomId
-        })
-        .then(async (res: any) => {
-          console.log(res);
+  // async create(data: any) {
+  //   try {
+  //     this.msgRoomRepository
+  //       .find({
+  //         id: data.roomId,
+  //       })
+  //       .then(async (res: any) => {
+  //         console.log(res);
 
-          if (res.length == 0) {
-            try {
-              this.msgRoomRepository
-                .save({
-                  type: 'private',
-                })
-                .then((room) => {
-                  this.messageRepo.save({
-                    message: data.message,
-                    messageRoom: room.id,
-                    user: data.sender,
-                  });
+  //         if (res.length == 0) {
+  //           try {
+  //             this.msgRoomRepository
+  //               .save({
+  //                 type: 'private',
+  //               })
+  //               .then((room) => {
+  //                 this.messageRepo.save({
+  //                   message: data.message,
+  //                   messageRoom: room.id,
+  //                   user: data.sender,
+  //                 });
 
-                  this.messageParticipantsRepo.save({
-                    messageRoom: room.id,
-                    user: data.reciever,
-                  });
+  //                 this.messageParticipantsRepo.save({
+  //                   messageRoom: room.id,
+  //                   user: data.reciever,
+  //                 });
 
-                  this.messageParticipantsRepo.save({
-                    messageRoom: room.id,
-                    user: data.sender,
-                  });
-                });
+  //                 this.messageParticipantsRepo.save({
+  //                   messageRoom: room.id,
+  //                   user: data.sender,
+  //                 });
+  //               });
+  //           } catch (error) {
+  //             console.log(error);
+  //           }
+  //         } else {
+  //           this.messageRepo.save({
+  //             message: data.message,
+  //             messageRoom: res.id,
+  //             user: data.sender,
+  //           });
+  //         }
+  //       });
 
-            } catch (error) {
-              console.log(error);
-            }
-          } else {
-            this.messageRepo.save({
-              message: data.message,
-              messageRoom: res.id,
-              user: data.sender,
-            });
-          }
-        });
+  //     // return {
+  //     //   statusCode: HttpStatus.CREATED,
+  //     // };
+  //   } catch (err) {
+  //     return err;
+  //   }
+  // }
 
-      // return {
-      //   statusCode: HttpStatus.CREATED,
-      // };
-    } catch (err) {
-      return err;
-    }
-  }
+  // async getUserChats(user) {
+  //   try {
+  //     const par: any = await this.messageParticipantsRepo.find({
+  //       where: {
+  //         user: user.userId,
+  //       },
+  //       relations: ['messageRoom'],
+  //       order: {
+  //         updatedAt: 'DESC',
+  //       },
+  //     });
 
-  async getUserChats(user) {
-    try {
-    
-      const result: any = await this.msgRoomRepository.find({
-        relations: ['messages', 'messageParticipants'],
-        where: {
-          messageParticipants: {
-            user: user.userId,
-          }
-        },
-        order: {
-          updatedAt: 'DESC',
-        },
-      });
+  //     let datas: any = [];
 
-      // let roomsIdArr: any = [];
+  //      par.map(async (room: any, index) => {
+  //       await this.msgRoomRepository
+  //         .find({
+  //           where: {
+  //             id: room.messageRoom.id,
+  //           },
+  //           order: {
+  //             updatedAt: 'DESC',
+  //           },
+  //         })
+  //         .then((data) => {
+  //           datas[index] = data;
+  //         });
+  //     });
 
-      // rooms.map((room: any) => {
-      //   roomsIdArr.push(room.messageRoom.id);
-      // });
-
-      // let peopleArr: any = [];
-
-      // roomsIdArr.map((pp, index) => {
-      //   peopleArr.push({
-      //     messageRoom: roomsIdArr[index],
-      //   });
-      // });
-
-      // const people = await this.messageParticipantsRepo.find({
-      //   where: {
-      //     user: user.userId,
-      //   },
-      //   relations: ['user', 'messageRoom'],
-      //   order: {
-      //     updatedAt: 'DESC',
-      //   },
-      // });
-
-      // const result = people.filter((person) => person.user.id != user.userId);
-
-      return {
-        messages: result,
-        statusCode: HttpStatus.OK,
-      };
-    } catch (err) {
-      return err;
-    }
-  }
+  //     return {
+  //       messages: datas,
+  //       statusCode: HttpStatus.OK,
+  //     };
+  //   } catch (err) {
+  //     return err;
+  //   }
+  // }
 
   findOne(id: number) {
     return `This action returns a #${id} chat`;
