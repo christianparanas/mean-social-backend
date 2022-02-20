@@ -13,7 +13,6 @@ import { Post } from './post.entity';
 import { Messages } from './messages.entity';
 import { Conversations } from './conversations';
 
-
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -53,6 +52,6 @@ export class User {
   @OneToMany(() => Messages, (message) => message.conversation)
   messages: Messages[];
 
-  @OneToMany(() => Conversations, (convo) => convo.messages)
-  conversations: Conversations[];
+  @OneToMany(() => Conversations, (conversations) => conversations)
+  convo: Conversations;
 }

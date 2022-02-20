@@ -15,95 +15,71 @@ export class ChatsService {
     @InjectRepository(Messages) private messageRepo: Repository<any>,
   ) {}
 
-  // async create(data: any) {
-  //   try {
-  //     this.msgRoomRepository
-  //       .find({
-  //         id: data.roomId,
-  //       })
-  //       .then(async (res: any) => {
-  //         console.log(res);
+  async create(data: any) {
+    try {
+      const msg = await this.conversationRepository.find({
+        where: [
+          { sender: data.sender, receiver: data.receiver },
+          { sender: data.receiver, receiver: data.sender },
+        ],
+      });
 
-  //         if (res.length == 0) {
-  //           try {
-  //             this.msgRoomRepository
-  //               .save({
-  //                 type: 'private',
-  //               })
-  //               .then((room) => {
-  //                 this.messageRepo.save({
-  //                   message: data.message,
-  //                   messageRoom: room.id,
-  //                   user: data.sender,
-  //                 });
+      console.log(msg);
 
-  //                 this.messageParticipantsRepo.save({
-  //                   messageRoom: room.id,
-  //                   user: data.reciever,
-  //                 });
+      if (msg.length !== 0) {
+        const saveMsg = await this.messageRepo.save({
+          text: data.message,
+          sender: data.sender,
+          conversation: msg[0].id,
+        });
 
-  //                 this.messageParticipantsRepo.save({
-  //                   messageRoom: room.id,
-  //                   user: data.sender,
-  //                 });
-  //               });
-  //           } catch (error) {
-  //             console.log(error);
-  //           }
-  //         } else {
-  //           this.messageRepo.save({
-  //             message: data.message,
-  //             messageRoom: res.id,
-  //             user: data.sender,
-  //           });
-  //         }
-  //       });
+        return;
+      }
 
-  //     // return {
-  //     //   statusCode: HttpStatus.CREATED,
-  //     // };
-  //   } catch (err) {
-  //     return err;
-  //   }
-  // }
+      const saveConvoRes = await this.conversationRepository.save({
+        sender: data.sender,
+        receiver: data.receiver,
+      });
 
-  // async getUserChats(user) {
-  //   try {
-  //     const par: any = await this.messageParticipantsRepo.find({
-  //       where: {
-  //         user: user.userId,
-  //       },
-  //       relations: ['messageRoom'],
-  //       order: {
-  //         updatedAt: 'DESC',
-  //       },
-  //     });
+      const saveMsgRes = await this.messageRepo.save({
+        text: data.message,
+        sender: data.sender,
+        conversation: saveConvoRes.id,
+      });
+    } catch (err) {
+      return err;
+    }
+  }
 
-  //     let datas: any = [];
+  async getUserChats(user) {
+    try {
+      const data = await this.conversationRepository.find({
+        where: [{ sender: user.userId }, { receiver: user.userId }],
+        relations: ['sender', 'receiver'],
+      });
 
-  //      par.map(async (room: any, index) => {
-  //       await this.msgRoomRepository
-  //         .find({
-  //           where: {
-  //             id: room.messageRoom.id,
-  //           },
-  //           order: {
-  //             updatedAt: 'DESC',
-  //           },
-  //         })
-  //         .then((data) => {
-  //           datas[index] = data;
-  //         });
-  //     });
+      return {
+        messages: data,
+        statusCode: HttpStatus.OK,
+      };
+    } catch (err) {
+      return err;
+    }
+  }
 
-  //     return {
-  //       messages: datas,
-  //       statusCode: HttpStatus.OK,
-  //     };
-  //   } catch (err) {
-  //     return err;
-  //   }
-  // }
+  async getConvo(data) {
+    try {
+      console.log(data);
+
+      const convo = await this.messageRepo.find({
+        where: { conversation: data.id },
+        relations: ['sender'],
+      });
+      return { convo: convo };
+    } catch (e) {
+      return e;
+    }
+  }
 
   findOne(id: number) {
     return `This action returns a #${id} chat`;
