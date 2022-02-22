@@ -15,10 +15,15 @@ export class ChatGateway {
   @WebSocketServer()
   server: Server;
 
+  @SubscribeMessage('join')
+  handleJoin(socket: Socket, data: any) {
+    socket.join(data.convoId)
+  }
+
   @SubscribeMessage('sendMsg')
-  handleMessage(socket: Socket, sentData: string) {
+  handleMessage(socket: Socket, sentData: any) {
     this.chatsService.create(sentData)
 
-    this.server.emit('newMsg', sentData);
+    this.server.in(sentData.convoId).emit('newMsg', sentData)
   }
 }
