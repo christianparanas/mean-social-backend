@@ -69,12 +69,27 @@ export class ChatsService {
 
   async getConvo(data) {
     try {
-      console.log(data);
+      if (data.hasConvo) {
+        const convo = await this.messageRepo.find({
+          where: { conversation: data.id },
+          relations: ['sender'],
+        });
+
+        return { convo: convo };
+      }
+
+      const findConvoRes = await this.conversationRepository.find({
+        where: [
+          { sender: data.id.par1, receiver: data.id.par2 },
+          { sender: data.id.par2, receiver: data.id.par1 },
+        ],
+      });
 
       const convo = await this.messageRepo.find({
-        where: { conversation: data.id },
+        where: { conversation: findConvoRes[0].id },
         relations: ['sender'],
       });
+
       return { convo: convo };
     } catch (e) {
       return e;
