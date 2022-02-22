@@ -24,14 +24,21 @@ export class ChatsService {
         ],
       });
 
-      console.log(msg);
-
       if (msg.length !== 0) {
-        const saveMsg = await this.messageRepo.save({
+        await this.messageRepo.save({
           text: data.message,
           sender: data.sender,
           conversation: msg[0].id,
         });
+
+        await this.conversationRepository.update(
+          {
+            id: msg[0].id,
+          },
+          {
+            id: msg[0].id,
+          },
+        );
 
         return;
       }
@@ -57,9 +64,9 @@ export class ChatsService {
         where: [{ sender: user.userId }, { receiver: user.userId }],
         relations: ['sender', 'receiver', 'messages'],
         order: {
-          updatedAt: 'DESC'
-        }
-      })
+          updatedAt: 'DESC',
+        },
+      });
 
       return {
         messages: data,
