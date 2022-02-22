@@ -53,10 +53,13 @@ export class ChatsService {
 
   async getUserChats(user) {
     try {
-      const data = await this.conversationRepository.find({
+      const data: any = await this.conversationRepository.find({
         where: [{ sender: user.userId }, { receiver: user.userId }],
-        relations: ['sender', 'receiver'],
-      });
+        relations: ['sender', 'receiver', 'messages'],
+        order: {
+          updatedAt: 'DESC'
+        }
+      })
 
       return {
         messages: data,
