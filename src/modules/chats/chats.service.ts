@@ -62,11 +62,12 @@ export class ChatsService {
     try {
       const data: any = await this.conversationRepository.find({
         where: [{ sender: user.userId }, { receiver: user.userId }],
-        relations: ['sender', 'receiver', 'messages'],
+        relations: ['sender', 'receiver', 'messages', 'messages.sender'],
         order: {
           updatedAt: 'DESC',
         },
-      });
+      })
+
 
       return {
         messages: data,

@@ -32,6 +32,4 @@ export class Messages {
 
   @ManyToOne(() => Conversations, (conversations) => conversations)
   conversation: Conversations;
-
-
 }

@@ -17,6 +17,7 @@ import { Repository } from 'typeorm';
 export class EventsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
+
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
@@ -40,13 +41,23 @@ export class EventsGateway
     socket.broadcast.emit('userChangeStatus');
   }
 
+  @SubscribeMessage('messageNotification')
+  handleMessageNotification(socket: Socket, data?: any) {
+
+    for (var key in this.activeUsers) {
+
+      
+      if (this.activeUsers[key] == data) {
+        socket.to(key).emit('msgNotif');
+      }
+    }
+  }
 
   handleConnection(client: Socket) {
-    this.logger.log(`Client connected: ${client.id}`);
+
   }
 
   handleDisconnect(client: Socket) {
-    this.logger.log(`Client disconnected: ${client.id}`);
 
     for (var key in this.activeUsers) {
       if (key == client.id) {
