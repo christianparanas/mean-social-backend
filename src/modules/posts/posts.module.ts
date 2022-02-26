@@ -5,12 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 // entity
 import { Post } from '../../entities/post.entity'
+import { Likers } from '../../entities/likers.entity'
 
 @Module({
   controllers: [PostsController],
   providers: [PostsService],
   imports: [
-    TypeOrmModule.forFeature([Post]),
+    TypeOrmModule.forFeature([Post, Likers]),
   ],
 })
 export class PostsModule {}

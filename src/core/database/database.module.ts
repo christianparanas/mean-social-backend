@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 // entities
 import { User } from '../../entities/user.entity';
 import { Post } from '../../entities/post.entity';
+import { Likers } from '../../entities/likers.entity';
 import { Messages } from '../../entities/messages.entity';
 import { Conversations } from '../../entities/conversations';
 
@@ -20,7 +21,7 @@ import { Conversations } from '../../entities/conversations';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-        entities: [User, Post, Messages, Conversations],
+        entities: [User, Post, Likers, Messages, Conversations],
         synchronize: true,
       }),
     }),

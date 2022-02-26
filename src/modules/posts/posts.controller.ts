@@ -21,6 +21,11 @@ export class PostsController {
     return this.postsService.findAll();
   }
 
+  @Post("react")
+  reactPost(@Request() req) {
+    return this.postsService.reactPost(req.body);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.postsService.findOne(+id);
