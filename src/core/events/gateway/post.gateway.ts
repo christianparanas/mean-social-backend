@@ -12,7 +12,7 @@ import { Repository } from 'typeorm';
 
 import { Post } from 'src/entities/post.entity';
 
-@WebSocketGateway({ cors: { origin: ['http://localhost:4200'] } })
+@WebSocketGateway({ cors: { origin: ['http://localhost:4200', 'https://lorem-dev.herokuapp.com/'] } })
 export class PostGateway {
 
   constructor(

@@ -8,7 +8,7 @@ import { Server, Socket } from 'socket.io';
 
 import { ChatsService } from 'src/modules/chats/chats.service';
 
-@WebSocketGateway({ cors: { origin: ['http://localhost:4200'] } })
+@WebSocketGateway({ cors: { origin: ['http://localhost:4200', 'https://lorem-dev.herokuapp.com/'] } })
 export class ChatGateway {
   constructor(private chatsService: ChatsService) {}
 
