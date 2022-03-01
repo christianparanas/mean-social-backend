@@ -26,6 +26,11 @@ export class PostsController {
     return this.postsService.reactPost(req.body);
   }
 
+  // @Post("reactors")
+  // findPostreactors(@Request() req) {
+  //   return this.postsService.postReactors(req.body);
+  // }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.postsService.findOne(+id);

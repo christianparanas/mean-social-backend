@@ -36,7 +36,7 @@ export class PostsService {
   async findAll() {
     try {
       const allPosts = await this.postRepository.find({
-        relations: ['user', "likers", "likers.user"],
+        relations: ['user', "likers"],
         order: {
           updatedAt: 'DESC',
         },
@@ -75,6 +75,22 @@ export class PostsService {
         post: data.postId,
         user: data.likerId
       })
+
+      
+    } catch (err) {
+      return err;
+    }
+  }
+
+  async postReactors(data: any) {
+    try {
+      const reactors = await this.likersRepository.find({
+        where: {
+          post: data.postId,
+        }
+      })
+
+      return reactors
 
       
     } catch (err) {
