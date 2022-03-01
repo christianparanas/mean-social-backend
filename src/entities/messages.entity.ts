@@ -21,10 +21,10 @@ export class Messages {
   @Column({ nullable: false })
   text: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ precision: null, type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ precision: null, type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user)

@@ -20,10 +20,10 @@ export class Conversations {
   @Column({ nullable: false })
   type: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ precision: null, type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ precision: null, type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   updatedAt: Date;
 
   @OneToMany(() => Messages, (message) => message.conversation)

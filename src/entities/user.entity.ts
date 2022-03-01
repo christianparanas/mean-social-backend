@@ -40,10 +40,10 @@ export class User {
   @Column({ nullable: false })
   password: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ precision: null, type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ precision: null, type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   updatedAt: Date;
 
   @OneToMany(() => Post, (post) => post.user)
