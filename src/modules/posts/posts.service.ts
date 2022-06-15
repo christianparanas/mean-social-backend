@@ -87,11 +87,11 @@ export class PostsService {
       const reactors = await this.likersRepository.find({
         where: {
           post: data.postId,
+          user: data.likerId
         }
       })
 
       return reactors
-
       
     } catch (err) {
       return err;
